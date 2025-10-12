@@ -24,7 +24,7 @@ node --version
 ### 実行方法
 
 ```bash
-npx github:toru0325/vibe-fighter/player \
+npx github:toru0325/vibe-fighter-player \
   --type claudecode \
   --player-id your-player-name \
   --endpoint https://your-firebase-url/postMessage \
@@ -52,7 +52,7 @@ npx github:toru0325/vibe-fighter/player \
 ### 基本的な使用方法
 
 ```bash
-npx github:toru0325/vibe-fighter/player \
+npx github:toru0325/vibe-fighter-player \
   -t claudecode \
   -p player-01 \
   -e https://us-central1-PROJECT.cloudfunctions.net/postMessage \
@@ -62,7 +62,7 @@ npx github:toru0325/vibe-fighter/player \
 ### カスタムディレクトリを監視
 
 ```bash
-npx github:toru0325/vibe-fighter/player \
+npx github:toru0325/vibe-fighter-player \
   -t claudecode \
   -p player-02 \
   -r ~/custom/claude/path \
@@ -72,7 +72,7 @@ npx github:toru0325/vibe-fighter/player \
 ### 詳細ログを有効化
 
 ```bash
-npx github:toru0325/vibe-fighter/player \
+npx github:toru0325/vibe-fighter-player \
   -t codex \
   -p player-02 \
   -e https://your-endpoint.com/postMessage \
@@ -82,7 +82,7 @@ npx github:toru0325/vibe-fighter/player \
 ### ローカル開発（エンドポイントなし）
 
 ```bash
-npx github:toru0325/vibe-fighter/player \
+npx github:toru0325/vibe-fighter-player \
   -t claudecode \
   -p dev-player \
   --verbose
@@ -232,7 +232,7 @@ A: はい。以下の方法があります：
 
 **Mac/Linux (nohup):**
 ```bash
-nohup npx github:toru0325/vibe-fighter/player \
+nohup npx github:toru0325/vibe-fighter-player \
   -t codex \
   -p player-02 \
   -e https://your-endpoint.com/postMessage \
@@ -247,7 +247,7 @@ Start-Process -NoNewWindow npx "github:your-username/vibe-fighter-player -t code
 **PM2 (推奨):**
 ```bash
 npm install -g pm2
-pm2 start "npx github:toru0325/vibe-fighter/player -t codex -p player-02 -e https://your-endpoint.com/postMessage"
+pm2 start "npx github:toru0325/vibe-fighter-player -t codex -p player-02 -e https://your-endpoint.com/postMessage"
 ```
 
 ### Q: APIキーはどこで取得できますか？
@@ -266,7 +266,7 @@ echo "VIBE_FIGHTER_API_KEY=your-api-key" > ~/.vibe-fighter.env
 
 # 実行時に読み込み
 export $(cat ~/.vibe-fighter.env | xargs)
-npx github:toru0325/vibe-fighter/player \
+npx github:toru0325/vibe-fighter-player \
   -t codex \
   -p player-02 \
   -k $VIBE_FIGHTER_API_KEY
@@ -278,7 +278,7 @@ npx github:toru0325/vibe-fighter/player \
 # start-player.sh
 #!/bin/bash
 source ~/.vibe-fighter.env
-npx github:toru0325/vibe-fighter/player \
+npx github:toru0325/vibe-fighter-player \
   -t codex \
   -p player-02 \
   -k $VIBE_FIGHTER_API_KEY
