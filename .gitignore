@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Log files
+*.log
+
+# Position tracking files
+.vibe-fighter-positions.json
+
+# Environment files
+.env
+.env.local
+*.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# NPM
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
