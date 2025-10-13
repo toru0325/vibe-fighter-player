@@ -7,6 +7,7 @@ import { ProcessedMessage, PlayerConfig } from './types';
 export declare class MessageSender {
     private config;
     private messageCount;
+    private lastSent;
     constructor(config: PlayerConfig);
     /**
      * メッセージをFirebase Functionsに送信

@@ -24,7 +24,7 @@ node --version
 ### 実行方法
 
 ```bash
-npx github:toru0325/vibe-fighter-player \
+npx --yes github:toru0325/vibe-fighter-player \
   --type claudecode \
   --player-id your-player-name \
   --endpoint https://your-firebase-url/postMessage \
@@ -52,7 +52,7 @@ npx github:toru0325/vibe-fighter-player \
 ### 基本的な使用方法
 
 ```bash
-npx github:toru0325/vibe-fighter-player \
+npx --yes github:toru0325/vibe-fighter-player \
   -t claudecode \
   -p player-01 \
   -e https://us-central1-PROJECT.cloudfunctions.net/postMessage \
@@ -62,7 +62,7 @@ npx github:toru0325/vibe-fighter-player \
 ### カスタムディレクトリを監視
 
 ```bash
-npx github:toru0325/vibe-fighter-player \
+npx --yes github:toru0325/vibe-fighter-player \
   -t claudecode \
   -p player-02 \
   -r ~/custom/claude/path \
@@ -72,7 +72,7 @@ npx github:toru0325/vibe-fighter-player \
 ### 詳細ログを有効化
 
 ```bash
-npx github:toru0325/vibe-fighter-player \
+npx --yes github:toru0325/vibe-fighter-player \
   -t codex \
   -p player-02 \
   -e https://your-endpoint.com/postMessage \
@@ -82,7 +82,7 @@ npx github:toru0325/vibe-fighter-player \
 ### ローカル開発（エンドポイントなし）
 
 ```bash
-npx github:toru0325/vibe-fighter-player \
+npx --yes github:toru0325/vibe-fighter-player \
   -t claudecode \
   -p dev-player \
   --verbose

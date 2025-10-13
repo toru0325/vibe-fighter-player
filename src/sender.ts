@@ -10,6 +10,10 @@ import { ProcessedMessage, PlayerConfig } from './types';
 export class MessageSender {
   private config: PlayerConfig;
   private messageCount = 0;
+  private lastSent: {
+    content: string;
+    timestamp: number;
+  } | null = null;
 
   constructor(config: PlayerConfig) {
     this.config = config;
@@ -22,6 +26,17 @@ export class MessageSender {
    * @param filePath - ソースファイルパス（ログ用）
    */
   async send(message: ProcessedMessage, filePath: string): Promise<void> {
+    // 重複チェック: 500ms以内に同じcontentなら送信をスキップ
+    const now = Date.now();
+    if (this.lastSent &&
+        this.lastSent.content === message.content &&
+        (now - this.lastSent.timestamp) <= 500) {
+      if (this.config.verbose) {
+        console.log('⏭️  Skipped duplicate message (within 500ms)');
+      }
+      return;
+    }
+
     const payload = {
       playerId: this.config.playerId,
       type: this.config.type,
@@ -37,6 +52,12 @@ export class MessageSender {
       console.log('─'.repeat(60));
       console.log(JSON.stringify(payload, null, 2));
       console.log('─'.repeat(60));
+
+      // 送信成功扱いで記録を更新
+      this.lastSent = {
+        content: message.content,
+        timestamp: now
+      };
       return;
     }
 
@@ -64,6 +85,12 @@ export class MessageSender {
 
       const roleEmoji = message.role === 'user' ? '👤' : '🤖';
       console.log(`✅ [${this.messageCount}] ${roleEmoji} ${message.role}: ${preview}`);
+
+      // 送信成功後に記録を更新
+      this.lastSent = {
+        content: message.content,
+        timestamp: now
+      };
 
     } catch (error) {
       this.handleSendError(error, message);
