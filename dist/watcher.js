@@ -10,13 +10,43 @@ exports.ClaudeConversationWatcher = void 0;
 const chokidar_1 = require("chokidar");
 const fs_1 = require("fs");
 const path_1 = require("path");
+const os_1 = require("os");
 const parser_1 = require("./parser");
 const sender_1 = require("./sender");
+/**
+ * OSの標準キャッシュディレクトリを取得
+ * macOS: ~/Library/Caches/vibe-fighter/
+ * Linux: ~/.cache/vibe-fighter/
+ * Windows: %LOCALAPPDATA%\vibe-fighter\Cache\
+ */
+function getCacheDir() {
+    const home = (0, os_1.homedir)();
+    const plat = (0, os_1.platform)();
+    let cacheBase;
+    if (plat === 'darwin') {
+        cacheBase = (0, path_1.join)(home, 'Library', 'Caches');
+    }
+    else if (plat === 'win32') {
+        cacheBase = process.env.LOCALAPPDATA || (0, path_1.join)(home, 'AppData', 'Local');
+    }
+    else {
+        // Linux and others
+        cacheBase = process.env.XDG_CACHE_HOME || (0, path_1.join)(home, '.cache');
+    }
+    const vibeFighterCache = (0, path_1.join)(cacheBase, 'vibe-fighter');
+    // ディレクトリが存在しない場合は作成
+    if (!(0, fs_1.existsSync)(vibeFighterCache)) {
+        (0, fs_1.mkdirSync)(vibeFighterCache, { recursive: true });
+    }
+    return vibeFighterCache;
+}
 class ClaudeConversationWatcher {
     constructor(config) {
         this.positions = {};
         this.config = config;
-        this.positionsFile = (0, path_1.join)(process.cwd(), '.vibe-fighter-positions.json');
+        const cacheDir = getCacheDir();
+        const timestamp = Date.now();
+        this.positionsFile = (0, path_1.join)(cacheDir, `positions-${config.playerId}-${timestamp}.json`);
         this.sender = new sender_1.MessageSender(config);
         this.loadPositions();
         // デフォルトはコンパクト表示。詳細ログが欲しいときだけ VIBE_FIGHTER_FULL_LOG=1 を指定する
@@ -82,10 +112,23 @@ class ClaudeConversationWatcher {
     stop() {
         if (this.watcher) {
             this.watcher.close();
-            this.savePositions();
         }
         const stats = this.sender.getStats();
         console.log(`\n📊 Total messages sent: ${stats.messageCount}`);
+        // プロセス終了時に位置情報ファイルを削除
+        try {
+            if ((0, fs_1.existsSync)(this.positionsFile)) {
+                (0, fs_1.unlinkSync)(this.positionsFile);
+                if (this.config.verbose) {
+                    console.log(`🗑️  Cleaned up positions file: ${this.positionsFile}`);
+                }
+            }
+        }
+        catch (error) {
+            if (this.config.verbose) {
+                console.error('⚠️  Failed to delete positions file:', error);
+            }
+        }
     }
     /**
      * ファイルの変更を処理
